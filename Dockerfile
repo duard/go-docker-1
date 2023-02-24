@@ -4,7 +4,7 @@ FROM golang:1.19.3-alpine AS builder
 RUN adduser -D -g '' elf
 # create workspace
 WORKDIR /opt/app/
-COPY go.mod go.sum ./
+COPY go.mod  ./
 # fetch dependancies
 RUN go mod download && \
     go mod verify
@@ -12,6 +12,8 @@ RUN go mod download && \
 COPY . .
 # build binary
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -a -installsuffix cgo -o /go/bin/simples-users ./cmd/app
+EXPOSE 8080/tcp
+EXPOSE 8081/udp
 
 
 # build a small image
